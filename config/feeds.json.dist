@@ -1,0 +1,12 @@
+[
+    {
+        "name"          : "GTO",
+        "url"           : "http://url/to/rss",
+        "destination"   : "/home/neolao/downloads",
+        "auth"          : 
+        {
+            "login"     : "neolao",
+            "password"  : "foobar"
+        }
+    }
+]
