@@ -1,0 +1,11 @@
+{
+    "name": "node-downloader",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "feedparser": "*",
+        "request": "*",
+        "querystring": "*",
+        "charm": "*"
+  }
+}
