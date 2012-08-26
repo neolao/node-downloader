@@ -157,8 +157,8 @@ function resumeQueue()
     // Find the first pending download
     downloadProcess = null;
     for (index = 0; index < downloadCount; index++) {
-        downloadProcess = downloads[index];
-        if (!downloadProcess.finished && downloadProcess.pending) {
+        if (!downloads[index].finished && downloads[index].pending) {
+            downloadProcess = downloads[index];
             break;
         }
     }
