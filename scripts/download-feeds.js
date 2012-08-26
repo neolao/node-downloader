@@ -128,7 +128,6 @@ function downloadFile(url, destination)
     downloads.push(downloadProcess);
 
     resumeQueue();
-    
 }
 
 /**
@@ -236,6 +235,12 @@ function updateDisplay()
     // Show the delay message
     if (delayActivated) {
         charm.foreground("white").write("Waiting ... "+delayCountDown);
+        return;
+    }
+
+    // If the download list is empty, then start the delay
+    if (count === 0) {
+        waitDelay();
         return;
     }
 
