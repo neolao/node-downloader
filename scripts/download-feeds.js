@@ -214,6 +214,7 @@ function waitDelay()
             return;
         }
 
+        clearInterval(delayInterval);
         delayActivated = false;
 
         // Load the configuration file again
