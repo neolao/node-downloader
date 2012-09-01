@@ -108,13 +108,8 @@ function downloadFile(url, destination)
     destinationFile = destination+"/"+fileName;
 
     // Add the download to the queue if the destination file does not exists
-    try {
-        fileStat = fs.lstatSync(destinationFile);
-        if (fileStat.isFile()) {
-            return;
-        }
-    } catch (error) {
-
+    if (fs.existsSync(destinationFile)) {
+        return;
     }
     downloadProcess = {
         url: url,
@@ -137,6 +132,7 @@ function downloadFile(url, destination)
 function resumeQueue()
 {
     var http = require("http"),
+        fs = require("fs"),
         downloadCount = downloads.length,
         activatedDownloadCount = 0,
         downloadProcess,
@@ -190,10 +186,17 @@ function resumeQueue()
         response.on("end", function()
         {
             stream.end();
-            fs.rename(destinationFileTemp, downloadProcess.path);
-            downloadProcess.finished = true;
 
-            resumeQueue();
+            var source = fs.createReadStream(destinationFileTemp);
+            var target = fs.createWriteStream(downloadProcess.path);
+            source.on("end", function()
+            {
+                fs.unlink(destinationFileTemp);
+                downloadProcess.finished = true;
+
+                resumeQueue();
+            });
+            source.pipe(target);
         });
     });
     httpClient.end();
@@ -229,10 +232,10 @@ function waitDelay()
 function updateDisplay()
 {
     var count = downloads.length,
-        index, downloadProcess, 
         finishedProcesses = [],
         currentProcesses = [],
-        pendingProcesses = [];
+        pendingProcesses = [],
+        index, downloadProcess;
 
     // Clear the display
     charm.reset();
@@ -274,8 +277,8 @@ function updateDisplay()
     }
 
     // Show the pending downloads
-    for (index = 0; index < currentProcesses.length; index++) {
-        downloadProcess = currentProcesses[index];
+    for (index = 0; index < pendingProcesses.length; index++) {
+        downloadProcess = pendingProcesses[index];
 
         charm.foreground("white").write(downloadProcess.path+" ");
         charm.foreground("green").write("pending\n");
