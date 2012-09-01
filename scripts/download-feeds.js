@@ -262,6 +262,14 @@ function updateDisplay()
             charm.foreground("green").write(downloadProcess.percent+"\n");
         }
         charm.foreground("white");
+
+        // Limit the display to 10 processes
+        if (index >= 10) {
+            charm.write(".\n");
+            charm.write(".\n");
+            charm.write(".\n");
+            break;
+        }
     }
 }
 
