@@ -229,7 +229,10 @@ function waitDelay()
 function updateDisplay()
 {
     var count = downloads.length,
-        index, downloadProcess;
+        index, downloadProcess, 
+        finishedProcesses = [],
+        currentProcesses = [],
+        pendingProcesses = [];
 
     // Clear the display
     charm.reset();
@@ -246,21 +249,36 @@ function updateDisplay()
         return;
     }
 
-    // Show the title
-    charm.foreground("yellow").write("Current downloads ("+count+"):\n");
-
-    // Show the current downloads
+    // Dispatch the processes into 3 array
     for (index = 0; index < count; index++) {
         downloadProcess = downloads[index];
 
-        charm.foreground("white").write(downloadProcess.path+" ");
         if (downloadProcess.finished) {
-            charm.foreground("green").write("finished\n");
+            finishedProcesses.push(downloadProcess);
         } else if (downloadProcess.pending) {
-            charm.foreground("green").write("pending\n");
+            pendingProcesses.push(downloadProcess);
         } else {
-            charm.foreground("green").write(downloadProcess.percent+"\n");
+            currentProcesses.push(downloadProcess);
         }
+    }
+
+    // Show the title
+    charm.foreground("yellow").write("Current downloads ("+finishedProcesses.length+"/"+count+"):\n");
+
+    // Show the current downloads
+    for (index = 0; index < currentProcesses.length; index++) {
+        downloadProcess = currentProcesses[index];
+
+        charm.foreground("white").write(downloadProcess.path+" ");
+        charm.foreground("green").write(downloadProcess.percent+"\n");
+    }
+
+    // Show the pending downloads
+    for (index = 0; index < currentProcesses.length; index++) {
+        downloadProcess = currentProcesses[index];
+
+        charm.foreground("white").write(downloadProcess.path+" ");
+        charm.foreground("green").write("pending\n");
         charm.foreground("white");
 
         // Limit the display to 10 processes
