@@ -273,7 +273,11 @@ function updateDisplay()
         downloadProcess = currentProcesses[index];
 
         charm.foreground("white").write(downloadProcess.path+" ");
-        charm.foreground("green").write(downloadProcess.percent+"\n");
+        if (downloadProcess.percent === "100%") {
+            charm.foreground("green").write("copying\n");
+        } else {
+            charm.foreground("green").write(downloadProcess.percent+"\n");
+        }
     }
 
     // Show the pending downloads
@@ -294,6 +298,14 @@ function updateDisplay()
     }
 }
 
+/**
+ * Uncaught error
+ */
+process.on("uncaughtException", function(error)
+{
+    console.log(error);
+    waitDelay();
+});
 
 
 // Load the configuration file
