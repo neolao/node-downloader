@@ -2,6 +2,7 @@ var fs                  = require("fs"),
     path                = require("path"),
     charm               = require("charm")(),
     feedsConfigPath     = path.normalize(__dirname+"/../config/feeds.json"),
+    temporaryPath       = __dirname+"/tmp",
     downloads           = [],
     maxDownloadCount    = 1,
     delayActivated      = false,
@@ -168,7 +169,7 @@ function resumeQueue()
     downloadProcess.pending = false;
 
     // Build the temporary destination file path
-    destinationFileTemp = downloadProcess.path+".tmp";
+    destinationFileTemp = temporaryPath+"/"+downloadProcess.fileName+".tmp";
 
     httpClient = http.get(downloadProcess.url, function(response)
     {
