@@ -266,7 +266,7 @@ function updateDisplay()
     }
 
     // Show the title
-    charm.foreground("yellow").write("Current downloads ("+finishedProcesses.length+"/"+count+"):\n");
+    charm.foreground("yellow").write("Downloads ("+finishedProcesses.length+"/"+count+"):\n");
 
     // Show the current downloads
     for (index = 0; index < currentProcesses.length; index++) {
