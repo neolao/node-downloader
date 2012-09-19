@@ -213,11 +213,20 @@ function waitDelay()
 
     delayInterval = setInterval(function()
     {
+        // If the download list is not empty, then stop the delay
+        if (downloads.length > 0) {
+            clearInterval(delayInterval);
+            delayActivated = false;
+            return;
+        }
+
+        // Count down of the delay
         delayCountDown--;
         if (delayCountDown > 0) {
             return;
         }
 
+        // The delay is finished
         clearInterval(delayInterval);
         delayActivated = false;
 
